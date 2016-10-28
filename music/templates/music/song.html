@@ -1,0 +1,27 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <title>My playlist</title>
+        <meta charset="utf-8">
+        <script src="{% static 'music/scripts.js' %}" charset="uft-8"></script>
+    </head>
+
+    <body>
+
+        <p>{{ song_name }}</p>
+
+        <p>
+            <audio controls autoplay onended="startRandomSong()">
+                <source src="{% static song_url1 %}" type="{{ song_mime }}">
+                <source src="{% static song_url2 %}" type="{{ song_mime }}">
+            </audio>
+        </p>
+
+        <button onclick="startRandomSong()">Random</button>
+
+    </body>
+
+</html>
