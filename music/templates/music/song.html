@@ -11,16 +11,16 @@
 
     <body>
 
-        <p>{{ song_name }}</p>
+        <p id="song-name">{{ song_name }}</p>
 
         <p>
-            <audio controls autoplay onended="startRandomSong()">
+            <audio id="player" controls autoplay onended="startRandomSong()" onvolumechange="storeVolume()">
                 <source src="{% static song_url1 %}" type="{{ song_mime }}">
                 <source src="{% static song_url2 %}" type="{{ song_mime }}">
             </audio>
         </p>
 
-        <button onclick="startRandomSong()">Random</button>
+        <button id="button-random" onclick="startRandomSong()">Random</button>
 
     </body>
 
