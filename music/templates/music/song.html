@@ -1,33 +1,28 @@
+{% extends "base.html" %}
 {% load static %}
 
-<!DOCTYPE html>
-<html>
 
-    <head>
-        <title>{{ song }}</title>
-        <meta charset="utf-8">
-        <script src="{% static 'music/scripts.js' %}" charset="uft-8"></script>
-    </head>
+{% block title %}{{ song }}{% endblock %}
 
-    <body>
+{% block imports %}
+    <script src="{% static 'music/scripts.js' %}" charset="uft-8"></script>
+{% endblock %}
 
-        <p id="song-name"><b>Title:</b> {{ song.name }}</p>
-        <p id="song-artist"><b>Artist:</b> {{ song.artist }}</p>
-        {% if song.genre %}
-        <p id="song-genre"><b>Category:</b> {{ song.genre }}</p>
-        {% endif %}
-        {% if song.album %}
-        <p id="song-album"><b>Source:</b> {{ song.album }}</p>
-        {% endif %}
+{% block content %}
+    <p id="song-name"><b>Title:</b> {{ song.name }}</p>
+    <p id="song-artist"><b>Artist:</b> {{ song.artist }}</p>
+    {% if song.genre %}
+    <p id="song-genre"><b>Category:</b> {{ song.genre }}</p>
+    {% endif %}
+    {% if song.album %}
+    <p id="song-album"><b>Source:</b> {{ song.album }}</p>
+    {% endif %}
 
-        <p>
-            <audio id="player" controls autoplay onended="startRandomSong()" onvolumechange="storeVolume()">
-                <source src="{% static filepath %}" type="{{ song.mime }}">
-            </audio>
-        </p>
+    <p>
+        <audio id="player" controls autoplay onended="startRandomSong()" onvolumechange="storeVolume()">
+            <source src="{% static filepath %}" type="{{ song.mime }}">
+        </audio>
+    </p>
 
-        <button id="button-random" onclick="startRandomSong()">Random</button>
-
-    </body>
-
-</html>
+    <button id="button-random" onclick="startRandomSong()">Random</button>
+{% endblock %}
