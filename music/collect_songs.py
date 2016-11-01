@@ -12,12 +12,13 @@ necessary to run `python manage.py collectstatic` to use them in production.
 
 
 # system and filesystem
-import os
-import sys
+import os, sys
+sys.path.append(os.path.dirname(os.getcwd()))
+os.environ['DJANGO_SETTINGS_MODULE'] = 'musicsite.settings'
 
 # django
 import django
-from django.contrib.staticfiles.storage import staticfiles_storage
+django.setup()
 from music.models import Song
 
 # utilities
@@ -26,15 +27,10 @@ import mutagen
 import shutil
 
 
-django.setup()
-# add the parent directory to the python path to import settings
-sys.path.append(os.path.dirname(os.getcwd()))
-os.environ['DJANGO_SETTINGS_MODULE'] = 'musicsite.settings'
-
-static_url = staticfiles_storage.url # shortcut
+TARGET_DIR = os.path.join(os.getcwd(), 'static', 'music', 'songs')
 
 
-def reset():
+def delete():
     print('You asked to reset the previously collected songs.')
     print('This will erase the content of %s ' % static_url('music/songs/')
             + 'and the songs in the database.')
@@ -104,8 +100,8 @@ def collect_song(dirname, filename):
     except Exception as e:
         raise ValueError('Could not collect file %s' % filepath)
 
-    static_filepath = static_url('music/songs/' + song.filename())
-    shutil.copy(filepath, os.getcwd() + static_filepath)
+    target_url = os.path.join(TARGET_DIR, song.filename())
+    shutil.copy(filepath, target_url)
 
 
 
@@ -121,8 +117,8 @@ if __name__ == '__main__':
     parser.add_argument('dirs', nargs = '+', help = 'music files directory')
     args = parser.parse_args()
 
-    if args.reset:
-        reset()
+    if args.delete:
+        delete()
 
     for dirname in args.dirs:
         collect(dirname)
