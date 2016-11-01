@@ -28,11 +28,13 @@ import shutil
 
 
 TARGET_DIR = os.path.join(os.getcwd(), 'static', 'music', 'songs')
+if not os.path.exists(TARGET_DIR):
+    os.makedirs(TARGET_DIR)
 
 
 def delete():
     print('You asked to reset the previously collected songs.')
-    print('This will erase the content of %s ' % static_url('music/songs/')
+    print('This will erase the content of %s ' % TARGET_DIR
             + 'and the songs in the database.')
     print('Are you really sure you want to do this ?')
 
@@ -40,7 +42,11 @@ def delete():
         print('Suppression cancelled.')
         return
 
-    raise NotImplementedError
+    if args.verbose: print('Emptying the target dir... ', end='')
+    for filename in os.listdir(TARGET_DIR):
+        os.remove(os.path.join(TARGET_DIR, filename))
+    Song.objects.all().delete()
+    if args.verbose: print('Done')
 
 def confirm():
     """
