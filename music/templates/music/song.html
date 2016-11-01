@@ -4,19 +4,25 @@
 <html>
 
     <head>
-        <title>My playlist</title>
+        <title>{{ song }}</title>
         <meta charset="utf-8">
         <script src="{% static 'music/scripts.js' %}" charset="uft-8"></script>
     </head>
 
     <body>
 
-        <p id="song-name">{{ song_name }}</p>
+        <p id="song-name"><b>Title:</b> {{ song.name }}</p>
+        <p id="song-artist"><b>Artist:</b> {{ song.artist }}</p>
+        {% if song.genre %}
+        <p id="song-genre"><b>Category:</b> {{ song.genre }}</p>
+        {% endif %}
+        {% if song.album %}
+        <p id="song-album"><b>Source:</b> {{ song.album }}</p>
+        {% endif %}
 
         <p>
             <audio id="player" controls autoplay onended="startRandomSong()" onvolumechange="storeVolume()">
-                <source src="{% static song_url1 %}" type="{{ song_mime }}">
-                <source src="{% static song_url2 %}" type="{{ song_mime }}">
+                <source src="{% static filepath %}" type="{{ song.mime }}">
             </audio>
         </p>
 

@@ -1,24 +1,21 @@
-from django.shortcuts import render, redirect
-from django.http import HttpResponseRedirect, Http404
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponseRedirect
 
-from random import randrange
+from music.models import Song
 
-NUM_SONGS = 8 # this horrible hack will be removed once the model is done
+import logging
+from random import choice
+
 
 def index(request):
     return HttpResponseRedirect('random')
 
 def random(request):
-    song_id = randrange(NUM_SONGS)
-    return redirect('song', song_id=song_id)
+    return redirect(choice(Song.objects.all()))
 
 def song(request, song_id):
-    if int(song_id) not in range(NUM_SONGS):
-        raise Http404("Song does not exist.")
-    else:
-        song_name = song_id
-        song_url1 = 'music/songs/%s.ogg' % song_id
-        song_url2 = 'music/songs/%s.opus' % song_id
-        song_mime = 'audio/ogg'
-        
-        return render(request, "music/song.html", locals())
+    song = get_object_or_404(Song, pk=song_id)
+    filepath = 'music/songs/' + song.filename()
+    logging.info('Serving song %s' % song)
+    return render(request, "music/song.html",
+            {'song': song, 'filepath': filepath})
