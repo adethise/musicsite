@@ -93,6 +93,7 @@ def collect_song(dirname, filename):
     """
     filepath = os.path.join(dirname, filename)
 
+    # TODO check if song must be updated instead of added
     try:
         raw = mutagen.File(filepath)
         song = Song(

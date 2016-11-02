@@ -5,24 +5,34 @@
 {% block title %}{{ song }}{% endblock %}
 
 {% block imports %}
-    <script src="{% static 'music/scripts.js' %}" charset="uft-8"></script>
+        <script src="{% static 'music/scripts.js' %}" charset="uft-8"></script>
 {% endblock %}
 
 {% block content %}
-    <p id="song-name"><b>Title:</b> {{ song.name }}</p>
-    <p id="song-artist"><b>Artist:</b> {{ song.artist }}</p>
-    {% if song.genre %}
-    <p id="song-genre"><b>Category:</b> {{ song.genre }}</p>
-    {% endif %}
-    {% if song.album %}
-    <p id="song-album"><b>Source:</b> {{ song.album }}</p>
-    {% endif %}
+                            <p id="song-name"><b>Title:</b> {{ song.name }}</p>
+                            <p id="song-artist"><b>Artist:</b> {{ song.artist }}</p>
+                            {% if song.genre %}
+                            <p id="song-genre"><b>Category:</b> {{ song.genre }}</p>
+                            {% endif %}
+                            {% if song.album %}
+                            <p id="song-album"><b>Source:</b> {{ song.album }}</p>
+                            {% endif %}
 
-    <p>
-        <audio id="player" controls autoplay onended="startRandomSong()" onvolumechange="storeVolume()">
-            <source src="{% static filepath %}" type="{{ song.mime }}">
-        </audio>
-    </p>
+                            <p>
+                                <audio
+                                    id="player"
+                                    controls
+                                    autoplay
+                                    onended="startRandomSong()"
+                                    onvolumechange="storeVolume()">
 
-    <button id="button-random" onclick="startRandomSong()">Random</button>
+                                    <source src="{% static filepath %}" type="{{ song.mime }}">
+                                </audio>
+                            </p>
+
+                            <button
+                              id="button-random"
+                              onclick="startRandomSong()">
+                                Random
+                            </button>
 {% endblock %}
