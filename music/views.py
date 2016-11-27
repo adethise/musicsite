@@ -2,27 +2,35 @@ from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.http import HttpResponseRedirect
 
 from .models import Song
-from .forms import SearchSongsForm
+from .forms import SearchSongsForm, CategoryForm
 
 import logging
-import urllib.parse
+from urllib.parse import urlencode
 from random import choice
 
 def index(request):
     search_form = SearchSongsForm()
+    category_form = CategoryForm()
     return render(request, 'music/index.html',
-            {'search_form': search_form})
+            {'search_form': search_form, 'category_form': category_form})
 
 def search(request):
-    search_form = SearchSongsForm(request.GET)
-    if search_form.is_valid():
-        query_key = search_form.cleaned_data['category']
-        query_val = search_form.cleaned_data['name']
-        query = urllib.parse.urlencode({query_key: query_val})
+
+    form = CategoryForm(request.GET)
+    if form.is_valid():
+        query= urlencode({'category': form.cleaned_data['category']})
         url = reverse('random') + '?' + query
         return redirect(url)
-    else:
-        return render(request, 'music/search_failed.html')
+
+    form = SearchSongsForm(request.GET)
+    if form.is_valid():
+        query_key = form.cleaned_data['category']
+        query_val = form.cleaned_data['name']
+        query = urlencode({query_key: query_val})
+        url = reverse('random') + '?' + query
+        return redirect(url)
+
+    return render(request, 'music/search_failed.html')
 
 def random(request):
     candidates = Song.get_songs_matching_filter(request.GET)

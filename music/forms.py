@@ -4,18 +4,18 @@ from .models import Song
 
 class SearchSongsForm(forms.Form):
 
-    SEARCH_CATEGORIES = [("artist", "Artist"), ("source", "Source")]
+    SEARCH_KEYS = [('artist', 'Artist'), ('source', 'Source')]
 
-    name     = forms.CharField(max_length = 128)
-    category = forms.ChoiceField(choices = SEARCH_CATEGORIES)
+    name = forms.CharField(label = 'Name', max_length = 128)
+    key  = forms.ChoiceField(label = 'Search in', choices = SEARCH_KEYS)
 
-    def clean(self):
-        super(SearchSongsForm, self).clean()
+class CategoryForm(forms.Form):
 
-        name     = self.cleaned_data['name']
-        category = self.cleaned_data['category']
+    CATEGORIES = [
+            ('Anime', 'Anime'),
+            ('Games', 'Games'),
+            ('Nightcore', 'Nightcore'),
+            ('Vocaloid', 'Vocaloid'),
+    ]
 
-        if len(Song.get_songs_matching_filter({category: name})) == 0:
-            raise forms.ValidationError(
-                    "Your query didn't return any result."
-            )
+    category = forms.ChoiceField(choices = CATEGORIES)
