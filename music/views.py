@@ -24,22 +24,38 @@ def search(request):
 
     form = SearchSongsForm(request.GET)
     if form.is_valid():
-        query_key = form.cleaned_data['category']
+        query_key = form.cleaned_data['key']
         query_val = form.cleaned_data['name']
         query = urlencode({query_key: query_val})
         url = reverse('random') + '?' + query
         return redirect(url)
 
-    return render(request, 'music/search_failed.html')
-
 def random(request):
-    candidates = Song.get_songs_matching_filter(request.GET)
-    url = choice(candidates).get_absolute_url()
+    candidates = Song.objects.all()
 
-    if len(request.GET) > 0:
-        url += '?' + request.GET.urlencode()
+    title = request.GET.get("title", None)
+    if title:
+        candidates = candidates.filter(title__contains=title)
 
-    return redirect(url)
+    artist = request.GET.get("artist", None)
+    if artist:
+        candidates = candidates.filter(artist__contains=artist)
+
+    category = request.GET.get("category", None)
+    if category:
+        candidates = candidates.filter(genre__iexact=category)
+
+    source = request.GET.get("source", None)
+    if source:
+        candidates = candidates.filter(album__contains=source)
+
+    if len(candidates) == 0:
+        return render(request, 'music/search_failed.html')
+    else:
+        url = choice(candidates).get_absolute_url()
+        if len(request.GET) > 0:
+            url += '?' + request.GET.urlencode()
+        return redirect(url)
 
 def song(request, song_id):
     song = get_object_or_404(Song, pk=song_id)

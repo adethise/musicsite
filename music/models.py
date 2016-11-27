@@ -18,25 +18,3 @@ class Song(models.Model):
 
     def __str__(self):
         return "%s - %s" % (self.artist, self.name)
-
-    @staticmethod
-    def get_songs_matching_filter(query):
-        candidates = Song.objects.all()
-
-        title = query.get("title", None)
-        if title:
-            candidates = candidates.filter(title__contains=title)
-
-        artist = query.get("artist", None)
-        if artist:
-            candidates = candidates.filter(artist__contains=artist)
-
-        category = query.get("category", None)
-        if category:
-            candidates = candidates.filter(genre__iexact=category)
-
-        source = query.get("source", None)
-        if source:
-            candidates = candidates.filter(album__contains=source)
-
-        return candidates
