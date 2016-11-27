@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block title %}Bainos's music{% endblock %}
+
+{% block imports %}
+{% endblock %}
+
+{% block content %}
+<h1>All</h1>
+<form action={% url "random" %}>
+    <input type="submit" value="Play all">
+</form>
+
+<hr>
+
+<h1>By artist / source</h1>
+<form action={% url "search" %}>
+    {{ search_form.as_p }}
+    <input type="submit" value="Play this">
+</form>
+{% endblock %}

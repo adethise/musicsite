@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block title %}Bainos's music{% endblock %}
+
+{% block content %}
+<div class="alert alert-danger">
+    Your search didn't produce any result.
+</div>
+<p><a href={% url "index" %}>Return to search page</a></p>
+{% endblock %}
