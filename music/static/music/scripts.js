@@ -9,7 +9,7 @@ window.addEventListener("load", function() {
 });
 
 function startRandomSong() {
-	window.location = "random";
+	window.location= "random" + window.location.search;
 }
 
 function storeVolume() {
