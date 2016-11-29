@@ -9,26 +9,21 @@ from urllib.parse import urlencode
 from random import choice
 
 def index(request):
-    search_form = SearchSongsForm()
-    category_form = CategoryForm()
-    return render(request, 'music/index.html',
-            {'search_form': search_form, 'category_form': category_form})
-
-def search(request):
-
-    form = CategoryForm(request.GET)
-    if form.is_valid():
-        query= urlencode({'category': form.cleaned_data['category']})
-        url = reverse('random') + '?' + query
-        return redirect(url)
-
-    form = SearchSongsForm(request.GET)
-    if form.is_valid():
-        query_key = form.cleaned_data['key']
-        query_val = form.cleaned_data['name']
+    search_form = SearchSongsForm(request.GET)
+    category_form = CategoryForm(request.GET)
+    if category_form.is_valid():
+        query = urlencode({'category': category_form.cleaned_data['category']})
+        return redirect(reverse('random') + '?' + query)
+    elif search_form.is_valid():
+        query_key = search_form.cleaned_data['key']
+        query_val = search_form.cleaned_data['name']
         query = urlencode({query_key: query_val})
-        url = reverse('random') + '?' + query
-        return redirect(url)
+        return redirect(reverse('random') + '?' + query)
+    else:
+        category_form = CategoryForm()
+        search_form = SearchSongsForm()
+        return render(request, 'music/index.html',
+                {'search_form': search_form, 'category_form': category_form})
 
 def random(request):
     candidates = Song.objects.all()

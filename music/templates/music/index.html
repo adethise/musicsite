@@ -16,7 +16,7 @@
 <hr>
 
 <h1>By category</h1>
-<form action={% url "search" %}>
+<form action={% url "index" %}>
     {{ category_form.category }}
     <input type="submit" value="Play this">
 </form>
@@ -24,7 +24,7 @@
 <hr>
 
 <h1>By artist / source</h1>
-<form action={% url "search" %}>
+<form action={% url "index" %}>
     {{ search_form.as_p }}
     <input type="submit" value="Play this">
 </form>
