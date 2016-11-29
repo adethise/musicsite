@@ -71,15 +71,19 @@ def collect(dirname):
     dirname -- path to a dir containing the songs
     """
     files = os.listdir(dirname)
+    sys.stdout.write('Collecting songs in %s' % dirname)
+    sys.stdout.flush()
     for i, filename in enumerate(files):
-        if args.verbose:
-            sys.stdout.write('\rCollecting songs in %s (%d%%)'
-                    % (dirname, 100 * (i+1) / len(files)))
-            sys.stdout.flush()
+        sys.stdout.write('\r')
+        if args.verbose: print(filename)
+        sys.stdout.write('Collecting songs in %s (%d%%)'
+                % (dirname, 100 * (i+1) / len(files)))
+        sys.stdout.flush()
         try:
             collect_song(dirname, filename)
         except ValueError as e:
             print(e)
+    print() # clear line
 
 def collect_song(dirname, filename):
     """
