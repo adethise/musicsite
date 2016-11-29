@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect, reverse, get_object_or_404
-from django.http import HttpResponseRedirect
+from django.db.models import Q
 
 from .models import Song
-from .forms import SearchSongsForm, CategoryForm
+from .forms import SearchSongsForm, CategoryForm, SearchForm
 
 import logging
 from urllib.parse import urlencode
@@ -24,6 +24,21 @@ def index(request):
         search_form = SearchSongsForm()
         return render(request, 'music/index.html',
                 {'search_form': search_form, 'category_form': category_form})
+
+def search(request):
+    form = SearchForm(request.GET)
+    if form.is_valid():
+        search = form.cleaned_data['search']
+        results = Song.objects.filter(
+                Q(name__icontains = search)
+                | Q(artist__icontains = search)
+                | Q(album__icontains = search)
+        )
+    else:
+        form = SearchForm()
+        results = []
+    return render(request, 'music/search.html',
+            {'form': form, 'songs': results})
 
 def random(request):
     candidates = Song.objects.all()

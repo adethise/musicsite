@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block title %}Search results{% endblock %}
+
+{% block imports %}
+    <link rel="stylesheet" href={% static "music/music.css" %}>
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-4">
+        {% for song in songs %}
+        <a href="{{ song.get_absolute_url }}" class="song-link-block">
+            <div class="panel panel-default panel-body song-link-block">
+                <p id="{{ song.pk }}">
+                    <span id="song-name">{{ song.name }}</span>
+                    <br>
+                    <span id="song-artist">{{ song.artist }}</span>
+                    {% if song.album %}<i>(<span id="song-album">{{ song.album }}</span>)</i>{% endif %}
+                </p>
+            </div>
+        </a>
+        {% endfor %}
+        </div>
+
+        <div class="col-md-4">
+            <form action="{% url "search" %}">
+                <p>{{ form.search }}</p>
+                <input type="Submit" value="Search">
+            </form>
+        </div>
+
+        <div class="col-md-4">
+        </div>
+    </div>
+{% endblock %}

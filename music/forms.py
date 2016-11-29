@@ -19,3 +19,7 @@ class CategoryForm(forms.Form):
     ]
 
     category = forms.ChoiceField(choices = CATEGORIES)
+
+class SearchForm(forms.Form):
+
+    search = forms.CharField(required = False)
