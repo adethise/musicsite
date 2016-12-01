@@ -33,6 +33,7 @@ def search(request):
                 Q(name__icontains = search)
                 | Q(artist__icontains = search)
                 | Q(album__icontains = search)
+                | Q(genre__icontains = search)
         )
     else:
         form = SearchForm()
