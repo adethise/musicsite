@@ -72,5 +72,23 @@ def song(request, song_id):
     song = get_object_or_404(Song, pk=song_id)
     filepath = 'music/songs/' + song.filename()
     logging.info('Serving song %s' % song)
-    return render(request, "music/song.html",
-            {'song': song, 'filepath': filepath})
+
+    form = SearchForm(request.GET)
+    if form.is_valid():
+        search = form.cleaned_data['search']
+        results = Song.objects.filter(
+                Q(name__icontains = search)
+                | Q(artist__icontains = search)
+                | Q(album__icontains = search)
+                | Q(genre__icontains = search)
+        )
+    else:
+        form = SearchForm()
+        results = []
+
+    return render(request, "music/search.html", {
+        'song': song,
+        'filepath': filepath,
+        'form': form,
+        'songs': results
+    })

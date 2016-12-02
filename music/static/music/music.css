@@ -6,3 +6,17 @@ a {
 	text-decoration: none;
 	background-color: #EEE;
 }
+
+#search-panel-head {
+	max-height: 20vh;
+}
+
+#search-panel {
+	max-height: 85vh;
+	overflow-y: auto;
+}
+
+#playlist-panel {
+	max-height: 85vh;
+	overflow-y: auto;
+}
