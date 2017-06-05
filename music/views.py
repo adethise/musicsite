@@ -70,7 +70,6 @@ def random(request):
 
 def song(request, song_id):
     song = get_object_or_404(Song, pk=song_id)
-    filepath = 'music/songs/' + song.filename()
     logging.info('Serving song %s' % song)
 
     form = SearchForm(request.GET)
@@ -88,7 +87,6 @@ def song(request, song_id):
 
     return render(request, "music/search.html", {
         'song': song,
-        'filepath': filepath,
         'form': form,
         'songs': results
     })

@@ -75,7 +75,7 @@ def collect(dirname):
     sys.stdout.flush()
     for i, filename in enumerate(files):
         sys.stdout.write('\r')
-        if args.verbose: print(filename)
+        if args.verbose: print(filename.rjust(79))
         sys.stdout.write('Collecting songs in %s (%d%%)'
                 % (dirname, 100 * (i+1) / len(files)))
         sys.stdout.flush()

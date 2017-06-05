@@ -1,14 +1,13 @@
-a {
+.song-panel a {
 	color: #000;
 }
 
-.song-link-block:hover {
+.song-panel a:hover {
 	text-decoration: none;
-	background-color: #EEE;
 }
 
-#search-panel-head {
-	max-height: 20vh;
+.song-panel:hover {
+	background-color: #EEE;
 }
 
 #search-panel {
@@ -19,4 +18,9 @@ a {
 #playlist-panel {
 	max-height: 85vh;
 	overflow-y: auto;
+}
+
+#playlist-item-count {
+	color: #666;
+	text-decoration: italic;
 }

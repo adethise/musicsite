@@ -12,6 +12,9 @@ class Song(models.Model):
     def filename(self):
         return str(self.pk) + self.original[self.original.rfind('.'):]
 
+    def filepath(self):
+        return 'music/songs/' + self.filename()
+
     def get_absolute_url(self):
         from django.shortcuts import reverse
         return reverse('song', args=[self.pk])

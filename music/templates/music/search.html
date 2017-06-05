@@ -12,15 +12,21 @@
 
 {% block content %}
     <div class="row">
-        <div id="search-panel-head" class="col-md-4">
+        <div id="search-panel-head" class="col-md-2">
             <form action="{% url "search" %}">
                 <p>{{ form.search }}</p>
                 <input type="Submit" value="Search">
             </form>
-            <hr>
         </div>
-        <div id="playlist-panel-head" class="col-md-4">
+        <div class="col-md-2">
+            <center><br><button onclick="playlist.addAll()">+ all</button></center>
+        </div>
+        <div id="playlist-panel-head" class="col-md-2">
             <h2>Current playlist</h2>
+            <p id="playlist-item-count"></p>
+        </div>
+        <div class="col-md-2">
+            <center><br><button onclick="playlist.removeAll()">- all</button></center>
         </div>
         <div id="player-panel-head" class="cold-md-4">
             <h2>Player</h2>
@@ -30,19 +36,19 @@
     <div class="row">
         <div id="search-panel" class="col-md-4">
             {% for song in songs %}
-            <div id="{{ song.pk }}">
-                <div class="panel panel-default panel-body song-link-block">
-                    <p>
-                        <a href="{{ song.get_absolute_url }}" class="song-link-block">
-                            <span class="song-name">{{ song.name }}</span>
-                            <br>
-                            <span class="song-artist">{{ song.artist }}</span>
-                            <span class="song-source">{% if song.album %}<i>({{ song.album }}</i>){% endif %}</span>
-                            <span class="song-category hidden">{{ song.genre }}</span>
-                        </a>
-                        <button class="pull-right" onClick="playlist.add({{ song.pk }})">+</button>
-                    </p>
-                </div>
+            <div id="{{ song.pk }}" class="panel panel-default panel-body song-panel search-result">
+                <p>
+                    <a href="{{ song.get_absolute_url }}">
+                        <span class="song-name">{{ song.name }}</span>
+                        <br>
+                        <span class="song-artist">{{ song.artist }}</span>
+                        <span class="song-source">{% if song.album %}<i>({{ song.album }}</i>){% endif %}</span>
+                        <span class="song-category hidden">{{ song.genre }}</span>
+                        <span class="song-filepath hidden">{% static song.filepath %}</span>
+                        <span class="song-mime hidden">{{ song.mime }}</span>
+                    </a>
+                    <button class="pull-right" onClick="playlist.add({{ song.pk }})">+</button>
+                </p>
             </div>
             {% empty %}
             <p>Sorry, no result was found.</p>
@@ -52,32 +58,25 @@
         <div id="playlist-panel" class="col-md-4">
         </div>
 
-        <div id="player-panel" class="col-md-4 panel panel-default panel-body text-center">
-            <p id="player-song-name"><b>Title:</b> {{ song.name }}</p>
+        <div id="player-panel" class="col-md-4">
+            <div id="player-panel-song" class="panel panel-default panel-body text-center hidden">
+                <p><b>Title:</b> <span id="player-song-name">{{ song.name }}</span></p>
 
-            <p id="player-song-artist"><b>Artist:</b> {{ song.artist }}</p>
+                <p><b>Artist:</b> <span id="player-song-artist">{{ song.artist }}</span></p>
 
-            {% if song.genre %}
-            <p id="player-song-genre"><b>Category:</b> {{ song.genre }}</p>
-            {% else %}
-            <p>&nbsp;</p>
-            {% endif %}
+                <p{% if not song.genre %} class="hidden"{% endif %}><b>Category:</b> <span id="player-song-category">{{ song.genre }}</span></p>
 
-            {% if song.album %}
-            <p id="player-song-album"><b>Source:</b> {{ song.album }}</p>
-            {% else %}
-            <p>&nbsp;</p>
-            {% endif %}
+                <p{% if not song.album %} class="hidden"{% endif %}><b>Source:</b> <span id="player-song-source">{{ song.album }}</span></p>
 
-            <p><audio
-              id="player"
-              controls
-              autoplay
-              onended="playlist.startRandomSong()"
-              onvolumechange="storeVolume()">
-                <source src="{% static filepath %}" type="{{ song.mime }}">
-            </audio></p>
-
+                <audio
+                  id="player"
+                  controls
+                  autoplay
+                  onended="playlist.startRandomSong()"
+                  onvolumechange="storeVolume()">
+                </audio>
+            </div>
+            <button onClick="playlist.startRandomSong()">Play</button>
         </div>
     </div>
 {% endblock %}
